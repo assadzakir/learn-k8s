@@ -10,7 +10,7 @@ $ docker images
 
 $ docker run --name kubia-container -p 8080:8080 -d kubia
 
-# ACCESSING YOUR APP
+# Accessing your app
 
 $ curl localhost:8080
 You’ve hit 44d76963e8e1
@@ -19,11 +19,11 @@ You’ve hit 44d76963e8e1
 
 $ docker ps
 
-# GETTING ADDITIONAL INFORMATION ABOUT A CONTAINER
+# Getting additional info about a container
 
 $ docker inspect kubia-container
 
-# RUNNING A SHELL INSIDE AN EXISTING CONTAINER
+# Running a shell inside an existing container
 
 $ docker exec -it kubia-container bash
 
@@ -31,11 +31,11 @@ $ docker exec -it kubia-container bash
 mands into the shell.
  -t , which allocates a pseudo terminal (TTY).
 
-# EXPLORING THE CONTAINER FROM WITHIN
+# Exploring the container from within 
 
 ps aux
 
-# EXIT THE SHELL
+# Exit the shell
 
 $ exit
 
@@ -43,7 +43,7 @@ $ exit
 
 $ docker stop kubia-container
 
-# CHECK STOP CONTAINER LIST
+# Check stop container list
 
 $ docker ps -a
 
@@ -56,7 +56,7 @@ $ docker rm kubia-container
 
 This deletes the container. All its contents are removed and it can’t be started again.
 
-# TAGGING AN IMAGE UNDER AN ADDITIONAL TAG
+# Tagging an image under an additional tag
 
 $ docker tag kubia luksa/kubia
 
@@ -67,7 +67,7 @@ This doesn’t rename the tag; it creates an additional tag for the same image.
 
 $ docker images | head
 
-# PUSHING THE IMAGE TO DOCKER HUB
+# Pushing the image to docker hub
 
 Before you can push the image to Docker Hub, you need to log in under your user ID
 with the docker login command. Once you’re logged in, you can finally push the
@@ -75,6 +75,6 @@ yourid/kubia image to Docker Hub like this:
 
 $ docker push yourid/kubia
 
-# RUNNING THE IMAGE ON A DIFFERENT MACHINE
+# Running the image on a different machine
 
 $ docker run -p 8080:8080 -d assadzakir/kubia
