@@ -1,0 +1,109 @@
+docker run <image-name> // creating and running container from an image
+docker run <image-name> echo Hi // overwriting the default command
+docker run <image-name> ls // listout the all files and folders
+docker ps // listout the all running containers
+docker ps --all // listing all the containers we have ever created
+docker run  = docker create + docker start 
+docker create <image-name> // for creating container
+docker start <container-id> // for starting container
+docker start -a <container-id> // (-a) whatever output comming from container print on current terminal
+docker system prune // deleting all stopped containers including images and build cache
+docker logs <container-id> // retrieving log output
+docker stop <container-id> // Stop a container
+docker kill <container-id> // Kill a container
+
+docker exec -it <container-id> redis-cli // execute command inside running container
+(-it) // Allow us to provide input to the container
+
+docker exec -it <container-id> sh // getting a command prompt in a container
+
+docker run -it <image-name> sh // run container with a shell
+
+docker build -t assadzakir/redis:latest // Tagging an Image
+
+docker commit -c 'CMD ["redis-server"]' <container-id> // creating a image from a container
+
+docker run -p 8080:8080 <image-id> // docker run with port mapping (losthost port: container port)
+
+DOCKER-COMPOSE COMMANDS
+
+docker-compose up // docker run myimage
+
+docker-compose up --build // docker build . // docker run myimage
+
+docker-compose up -d // launch in background
+
+docker-compose down // stop containers
+
+docker-compose restart policies
+
+-1 default  	"no"
+-2 	    	"always"
+-3 		"on-failure"
+-4 		"unless-stopped"
+
+docker-compose ps // listing all the running containers
+
+
+
+--------------------------
+
+Creating the dev docker file
+
+-docker build -f Dockerfile.dev .
+
+// Docker Volumes
+-docker run -p 3000:3000 -v /app/node_modules -v $(pwd):/app <image_id> // (-v /app/node_modules) = bookmarking volumes; 
+
+// Volumes with Docker compose
+
+docker.compose.yml
+
+version: '3'
+services:
+	web:
+		build:
+			context: .
+			dockerfile: Dockerfile.dev
+		ports:
+			- "3000:3000"
+		volumes:
+			- /app/node_modules
+			- .:app
+
+
+command 
+
+docker-compose up 
+
+
+// Executing test
+
+docker run -it <image-id> npm run test
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

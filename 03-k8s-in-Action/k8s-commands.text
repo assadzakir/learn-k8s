@@ -1,0 +1,298 @@
+==================================================================================================
+Heading: Object Type
+==================================================================================================
+
+Pods // Runs one or more closely related containers
+
+Services // sets up networking in a Kubernetes cluster
+
+Deployment // Maintains a set of identical pods, ensuring that they have the correct config
+                and that the right number exist
+
+Secrets // Securely stores a piece of information in the cluster, such as a database password
+
+    -Types of secret
+        -generic
+        -docker-registery
+        -tls // 
+
+==============================================================================================
+Pods
+==============================================================================================
+
+
+-Runs a single set of containers
+
+-Good for one-off dev purposes
+
+-Rarely used directly in production
+
+==============================================================================================
+Deployment
+==============================================================================================
+
+
+-Runs a set of indentical pods (one or more)
+
+- Monitors the state of each pods, updating as necessary
+
+- Good for dev
+
+-Good for production
+
+
+==============================================================================================
+services
+==============================================================================================
+
+-ClusterIP // Exposes a set of pods to other objects in the cluster
+
+-NodePort // Exposes a set of pods to the outside world (only good for dev purposes!!!)
+
+-LoadBalancer // legacy way of getting network traffic in a clustor
+ 
+-Ingress  // Exposes a set of services to the outside world
+
+==================================================================================================
+Heading: Feed a config file to kubectl
+==================================================================================================
+
+
+command: kubectl apply -f <filename>
+
+Description:
+
+kubectl // CLI we use to change our k8s cluster
+
+apply // change the current configuration of our cluster
+
+-f // we want to specify a file that has the config changes
+
+<filename> // path to the file with the config
+
+==================================================================================================
+Heading: Printing the status of all running pods/services
+==================================================================================================
+
+
+command: kubectl get pods/services
+
+Description:
+
+kubectl // CLI we use to change our k8s cluster
+
+get // we want to retrieve information about a running object
+
+services // specifies the object type that we want to get information about
+
+==================================================================================================
+Notes:
+==================================================================================================
+
+-Kubernetes is a system to deploy containerized apps
+-Nodes are individual machines (or VM'S) that runs containers
+-Master are machines (or VM'S) with a set of programs to manage Nodes
+-Kubernetes didn't build our images - it got them from shomewhere else
+-Kubernetes (the master) decided where to run each container- each nodecan 
+    run a dissimilar set of containers
+-To deploy something, we update the desired state of the master with a config file
+-The master works constantly to meet your desired state
+
+==================================================================================================
+Heading: Imperative Deployments
+==================================================================================================
+
+Description: Do exactly these steps to arrive at this container setup
+
+==================================================================================================
+Heading Declarative Deployments
+==================================================================================================
+
+Description: Our container setup should look like this, make it happen
+
+==================================================================================================
+Heading: Get detailed info about an object
+==================================================================================================
+
+command: kubectl describe <Object Type> <Object Name>
+
+Description: 
+
+describe // we want to get detailed info
+
+<Object Type> // specifies the type of object we want to get info about
+
+<Object Name> // Name of Object
+
+
+==================================================================================================
+Heading: Remove an Object
+==================================================================================================
+
+command: kubectl delete -f <filename>
+
+Description:
+
+kubectl // CLI we use to change our k8s cluster
+
+delete // we want to delete a running Object
+
+-f // we want to specify a file that has the config changes
+
+<filename> // path to the file with the config
+
+
+==============================================================================================
+Imperative command to update image
+==============================================================================================
+
+command: kubectl set image <object type> / <object name> <container name> = <new image to use>
+
+Description:
+
+set // we want to change a property
+
+image // we want to change the image property
+
+<container name> // Name of the container we are updating (get this from config file)
+
+<new image to use> // full name of image to use with tage
+
+==============================================================================================
+Cofigure the VM to Use Your Docker Server ( eval $(minikube docker-env) )
+==============================================================================================
+
+Description:
+            This only configure your current terminal window.
+
+==============================================================================================
+WHY MESS WITH DOCKER IN THE NODE ?
+==============================================================================================
+
+-Use all the same debugging techniques we learned with Docker CLI (Many of these commands are available throught kubectl)
+
+-Manually Kill containers to test Kubernetes ability  to 'self-heal'.
+
+-Delete cached images in the node.
+
+==============================================================================================
+Important Commands
+==============================================================================================
+
+-kubectl logs podId
+-kubectl get storageclass
+-kubectl describe storageclass
+-kubectl get pv // PERSISTENT VOLUME
+-kubectl get pvc // PERSISTENT VOLUME CLAIM
+-minikube ip
+
+
+==============================================================================================
+Kubernetes VOLUME
+==============================================================================================
+
+Heading: VOLUME IN GENERIC CONTAINER TERMINOLOGY
+
+Description: Some Type  of mechanism that allows a container to access a filesystem outsite itself.
+
+Heading: VOLUME IN KUBERNETES
+
+Description: An Object that allows a container to store data at the prod level
+
+    -VOLUME
+    -PERSISTENT VOLUME
+    -PERSISTENT VOLUME CLAIM
+        -STATICALLY PROVISIONED PERSISTENT VOLUME
+        -DYNAMICALLY PROVISIONED PERSISTENT VOLUME
+
+Heading: PERSISTENT VOLUME ACCESS MODE
+
+Description:
+
+        ACCESS MODES
+        -ReadWriteOnce // Can be used by a single node.
+        -ReadOnlyMany // Multiple nodes can read from this.
+        -ReadWriteMany // Can be read and written to by many nodes.
+
+//https://kubernetes.io/docs/concepts/storage/storage-classes/
+
+
+==============================================================================================
+CREATING AN ENCODED SECRET
+==============================================================================================
+
+COMMAND: kubectl create secret generic <secret_name> --from-literal key=value
+
+Description:
+
+create // Imperative command to create new object
+
+secret // Type of object we are going to create
+
+generic // Type of secret
+
+<secret_name> // Name of secret, for later reference in a pod config
+
+--from-literal // we are going to add the secret information into this command, as opposed to from file
+
+key=value // key value pair of the secret information
+
+==============================================================================================
+INGRESS-NGINX
+==============================================================================================
+
+Using
+// github.com/kubernetes/ingress-nginx
+//https://kubernetes.github.io/ingress-nginx/deploy/#prerequisite-generic-deployment-command
+
+Not Using
+//github.com/nginxinc/kubernetes-ingress
+
+
+==============================================================================================
+INSTALLING TRAVIS CLI AS A DOCKER CONTAINER
+==============================================================================================
+
+command:
+    - docker run it -v $(pwd):/app ruby:2.3 sh // windows docker run -it -v ${pwd}:/app ruby:2.3 sh
+    - gem install travis --no-rdoc --no-ri
+    - gem install travis
+    - travis login
+
+==============================================================================================
+KUBERNETES SECURITY WITH RBAC 
+==============================================================================================
+
+-limits who can access and modify objects in our cluster
+-Enable on Google Cloud by default
+-Tiller wants to make changes to our cluster, so it needs to get some permission set
+
+==USER ACCOUNT==
+-Identifies a person administering our cluster.
+
+==SERVICE ACCOUNT==
+-Identifies a "pod" administering a cluster.
+
+==ClusterRoleBinding==
+-Authorize an account to do a certain set of actions
+accross the entire cluster
+
+==RoleBinding==
+-Authorize an account to do a certain set of actions in a *single namespace*
+
+==============================================================================================
+ASSIGNING TILLER A SERVICE ACCOUNT
+==============================================================================================
+
+// create a new service account called tiller in the kube-system namespace
+command:
+        kubectl create serviceaccount --namespace kube-system tiller
+
+// create a new clusterrolebinding with the role 'cluster-admin' and assign it to service account 'tiller'
+command:
+        kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+            
+
+
+
+
